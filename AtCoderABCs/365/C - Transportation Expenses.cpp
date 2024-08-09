@@ -82,22 +82,47 @@ ll mod_div(ll a, ll b, ll m) {a = a % m; b = b % m; return (mod_mul(a, mminvprim
 ll phin(ll n) {ll number = n; if (n % 2 == 0) {number /= 2; while (n % 2 == 0) n /= 2;} for (ll i = 3; i <= sqrt(n); i += 2) {if (n % i == 0) {while (n % i == 0)n /= i; number = (number / i * (i - 1));}} if (n > 1)number = (number / n * (n - 1)) ; return number;}
 ll getRandomNumber(ll l, ll r) {return uniform_int_distribution<ll>(l, r)(rng);}
 /*--------------------------------------------------------------------------------------------------------------------------*/
-void solve() {
-    lli n;
-    cin >> n;
-    vll a(n);
 
-    in_1D_arr(a, n);
-
-    priority_queue<pair<lli, lli>> pq;
-    f(i, 0, n) {
-        pq.push({a[i], i});
+bool pos(ll mid, lli a[], lli n, lli m){
+    lli sum = 0;
+    f(i,0,n){
+        sum += min(mid, a[i]);
     }
 
-    pq.pop();
+    return m >= sum;
+}
 
-    cout << pq.top().second + 1 << nline;
-    return;
+
+
+void solve() {
+
+    lli n,m;
+    cin >> n >> m;
+    lli a[n];
+    in_1D_arr(a, n);
+
+    lli l = 1;
+    lli h = 2e9;
+    lli ans = 0;
+
+    if(pos(2e9, a, n, m)){
+        cout << "infinite" << endl;
+        return;
+    }
+
+    while(l <= h){
+        lli mid = l + (h-l)/2;
+
+        if(pos(mid, a, n, m)){
+            ans = mid;
+            l = mid + 1;
+        }
+        else{
+            h = mid - 1;
+        }
+        
+    }
+    cout << ans << endl;
 }
 int main() {
 #ifdef parthgupta21
@@ -105,8 +130,7 @@ int main() {
 #endif
     fastio();
     auto start1 = high_resolution_clock::now();
-    lli t=1;
-    
+    lli t = 1;
     while (t--) {
         solve();
     }
